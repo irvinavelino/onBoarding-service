@@ -27,8 +27,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="HotelDetails" type="{http://onBoarding.com/hotels}HotelDetails"/>
- *         &lt;element name="amenity" type="{http://onBoarding.com/hotels}Amenities" maxOccurs="unbounded"/>
+ *         &lt;element name="HotelDetails" type="{http://onBoarding.com/hotels}HotelDetails" maxOccurs="unbounded"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -39,69 +38,41 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
-    "hotelDetails",
-    "amenity"
+    "hotelDetails"
 })
-@XmlRootElement(name = "GetHotelByIdResponse")
-public class GetHotelByIdResponse {
+@XmlRootElement(name = "FilterHotelsByNameResponse")
+public class FilterHotelsByNameResponse {
 
     @XmlElement(name = "HotelDetails", required = true)
-    protected HotelDetails hotelDetails;
-    @XmlElement(required = true)
-    protected List<Amenities> amenity;
+    protected List<HotelDetails> hotelDetails;
 
     /**
      * Gets the value of the hotelDetails property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link HotelDetails }
-     *     
-     */
-    public HotelDetails getHotelDetails() {
-        return hotelDetails;
-    }
-
-    /**
-     * Sets the value of the hotelDetails property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link HotelDetails }
-     *     
-     */
-    public void setHotelDetails(HotelDetails value) {
-        this.hotelDetails = value;
-    }
-
-    /**
-     * Gets the value of the amenity property.
      * 
      * <p>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the amenity property.
+     * This is why there is not a <CODE>set</CODE> method for the hotelDetails property.
      * 
      * <p>
      * For example, to add a new item, do as follows:
      * <pre>
-     *    getAmenity().add(newItem);
+     *    getHotelDetails().add(newItem);
      * </pre>
      * 
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link Amenities }
+     * {@link HotelDetails }
      * 
      * 
      */
-    public List<Amenities> getAmenity() {
-        if (amenity == null) {
-            amenity = new ArrayList<Amenities>();
+    public List<HotelDetails> getHotelDetails() {
+        if (hotelDetails == null) {
+            hotelDetails = new ArrayList<HotelDetails>();
         }
-        return this.amenity;
+        return this.hotelDetails;
     }
-
 
 }

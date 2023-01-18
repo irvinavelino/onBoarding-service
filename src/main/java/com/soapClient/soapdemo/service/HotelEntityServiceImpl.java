@@ -3,9 +3,10 @@ package com.soapClient.soapdemo.service;
 import com.soapClient.soapdemo.entity.HotelEntity;
 import com.soapClient.soapdemo.repository.HotelEntityRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,9 +38,12 @@ public class HotelEntityServiceImpl implements HotelEntityService
     }
 
     @Override
-    public HotelEntity getEntityByName(String name) {
+    public List<HotelEntity> filterEntityByName(String name) {
         try {
-            return this.repository.findByName(name);
+            List<HotelEntity> list = new ArrayList<>();
+            Pageable paging=PageRequest.of(0,5);
+            repository.findByName(name).forEach(e -> list.add(e));
+            return list;
         } catch (Exception e) {
             e.printStackTrace();
             return null;
@@ -50,6 +54,7 @@ public class HotelEntityServiceImpl implements HotelEntityService
     public List< HotelEntity > getAllEntities() {
         try {
             List<HotelEntity> list = new ArrayList<>();
+            Pageable paging=PageRequest.of(0,5);
             repository.findAll().forEach(e -> list.add(e));
             return list;
         }
@@ -78,6 +83,7 @@ public class HotelEntityServiceImpl implements HotelEntityService
             return true;
         } catch (Exception e) {
             e.printStackTrace();
+            System.out.println(e);
             return false;
         }
     }

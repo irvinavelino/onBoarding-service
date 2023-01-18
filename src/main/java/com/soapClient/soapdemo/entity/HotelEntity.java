@@ -1,14 +1,16 @@
 package com.soapClient.soapdemo.entity;
 
+import com.onboarding.hotels.Amenities;
+
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.*;
 
 @Entity
 @Table(name="hotels")
-public class HotelEntity implements Serializable{
+public class HotelEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -18,18 +20,28 @@ public class HotelEntity implements Serializable{
     private String name;
     private String address;
     private float rating;
-    @ElementCollection
-    private List<String> amenities= new ArrayList<>();
-
+    @ManyToMany(fetch = FetchType.LAZY,
+            cascade = {
+                    CascadeType.PERSIST,
+                    CascadeType.MERGE
+            },mappedBy = "hotelEntities")
+    private Set<AmenityEntity> amenityEntities;
     public HotelEntity() {
 
     }
 
-    public HotelEntity(String name, String address, float rating, List<String> amenities) {
+    public Set<AmenityEntity> getAmenityEntities() {
+        return amenityEntities;
+    }
+
+    public void setAmenityEntities(Set<AmenityEntity> amenityEntities) {
+        this.amenityEntities = amenityEntities;
+    }
+
+    public HotelEntity(String name, String address, float rating) {
         this.name = name;
         this.address = address;
         this.rating = rating;
-        this.amenities = amenities;
     }
     public int getHotelId() {
         return hotelId;
@@ -63,11 +75,5 @@ public class HotelEntity implements Serializable{
         this.rating = rating;
     }
 
-    public List<String> getAmenities() {
-        return amenities;
-    }
 
-    public void setAmenities(List<String> amenities) {
-        this.amenities=amenities;
-    }
 }

@@ -7,7 +7,7 @@ import java.util.List;
 public interface HotelEntityService
 {
     public HotelEntity getEntityByHotelId(int id);
-    public HotelEntity getEntityByName(String name);
+    public List<HotelEntity> filterEntityByName(String name);
     public List<HotelEntity> getAllEntities();
     public HotelEntity addEntity(HotelEntity entity);
     public boolean updateEntity(HotelEntity entity);
