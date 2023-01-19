@@ -1,4 +1,5 @@
 package com.soapClient.soapdemo.repository;
+import com.soapClient.soapdemo.entity.AmenityEntity;
 import com.soapClient.soapdemo.entity.HotelEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -12,4 +13,5 @@ public interface HotelEntityRepository extends CrudRepository<HotelEntity,Intege
     public List<HotelEntity> findByName(String name);
     public HotelEntity findByHotelId(int id);
     List<HotelEntity> findAll();
+    public List<AmenityEntity> findAmenitiesByHotelId(int hotelId);
 }

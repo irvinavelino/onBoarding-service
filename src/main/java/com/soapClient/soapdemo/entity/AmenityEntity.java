@@ -3,6 +3,7 @@ package com.soapClient.soapdemo.entity;
 import com.onboarding.hotels.HotelDetails;
 
 import javax.persistence.*;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -17,13 +18,8 @@ public class AmenityEntity
     private String details;
     @ManyToMany(fetch = FetchType.LAZY,
             cascade = {
-                    CascadeType.PERSIST,
                     CascadeType.MERGE
-            })
-    @JoinTable(
-            name = "hotel_amenities",
-            joinColumns = @JoinColumn(name = "amenityId"),
-            inverseJoinColumns = @JoinColumn(name = "hotelId"))
+            },mappedBy = "amenityEntities")
     private Set<HotelEntity> hotelEntities=new HashSet<>();
     public AmenityEntity() {
     }
@@ -63,5 +59,25 @@ public class AmenityEntity
 
     public void setDetails(String details) {
         this.details = details;
+    }
+    public void addHotel(HotelEntity hotelEntity){
+        if(this.hotelEntities==null) {
+            this.hotelEntities = Collections.singleton(hotelEntity);
+        }
+        else
+        {
+            this.hotelEntities.add(hotelEntity);
+            hotelEntity.getAmenityEntities().add(this);
+        }
+
+    }
+    public void removeHotel(int hotelId)
+    {
+        HotelEntity hotelEntity=this.hotelEntities.stream().filter(h->h.getHotelId()==hotelId).findFirst().orElse(null);
+        if(hotelEntity!=null)
+        {
+            this.hotelEntities.remove(hotelEntity);
+            hotelEntity.getAmenityEntities().remove(this);
+        }
     }
 }

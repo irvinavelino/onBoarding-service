@@ -99,7 +99,6 @@
     </xs:complexType>
     <xs:complexType name="Amenities">
         <xs:sequence>
-
             <xs:element name="name" type="xs:string" ></xs:element>
             <xs:element name="details" type="xs:string" ></xs:element>
         </xs:sequence>

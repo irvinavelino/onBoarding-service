@@ -9,5 +9,5 @@ import java.util.List;
 public interface AmenityEntityRepository extends CrudRepository<AmenityEntity,Integer> {
     public boolean existsAmenityByname(String name);
     public AmenityEntity getByname(String name);
-    public AmenityEntity getByhotelEntities(HotelEntity hotelEntity);
+    public List<HotelEntity> findHotelsByAmenityId(int amenityId);
 }

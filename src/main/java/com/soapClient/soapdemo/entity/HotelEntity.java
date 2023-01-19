@@ -3,6 +3,7 @@ package com.soapClient.soapdemo.entity;
 import com.onboarding.hotels.Amenities;
 
 import java.io.Serializable;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -22,9 +23,12 @@ public class HotelEntity implements Serializable {
     private float rating;
     @ManyToMany(fetch = FetchType.LAZY,
             cascade = {
-                    CascadeType.PERSIST,
                     CascadeType.MERGE
-            },mappedBy = "hotelEntities")
+            })
+    @JoinTable(
+            name = "hotel_amenities",
+            joinColumns = @JoinColumn(name = "amenityId"),
+            inverseJoinColumns = @JoinColumn(name = "hotelId"))
     private Set<AmenityEntity> amenityEntities;
     public HotelEntity() {
 
@@ -36,6 +40,20 @@ public class HotelEntity implements Serializable {
 
     public void setAmenityEntities(Set<AmenityEntity> amenityEntities) {
         this.amenityEntities = amenityEntities;
+    }
+
+    public void addAmenity(AmenityEntity amenityEntity){
+        this.amenityEntities.add(amenityEntity);
+        amenityEntity.getHotelEntities().add(this);
+    }
+    public void removeAmenity(int amenityId)
+    {
+        AmenityEntity amenityEntity=this.amenityEntities.stream().filter(h->h.getAmenityId()==amenityId).findFirst().orElse(null);
+        if(amenityEntity!=null)
+        {
+            this.amenityEntities.remove(amenityEntity);
+            amenityEntity.getHotelEntities().remove(this);
+        }
     }
 
     public HotelEntity(String name, String address, float rating) {

@@ -1,6 +1,8 @@
 package com.soapClient.soapdemo.service;
 
+import com.soapClient.soapdemo.entity.AmenityEntity;
 import com.soapClient.soapdemo.entity.HotelEntity;
+import com.soapClient.soapdemo.repository.AmenityEntityRepository;
 import com.soapClient.soapdemo.repository.HotelEntityRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -15,13 +17,15 @@ import java.util.List;
 public class HotelEntityServiceImpl implements HotelEntityService
 {
     private HotelEntityRepository repository;
+    private AmenityEntityRepository amenityEntityRepository;
     public HotelEntityServiceImpl() {
 
     }
 
     @Autowired
-    public HotelEntityServiceImpl(HotelEntityRepository repository) {
+    public HotelEntityServiceImpl(HotelEntityRepository repository, AmenityEntityRepository amenityEntityRepository) {
         this.repository = repository;
+        this.amenityEntityRepository=amenityEntityRepository;
     }
 
     @Override
@@ -59,6 +63,24 @@ public class HotelEntityServiceImpl implements HotelEntityService
             return list;
         }
         catch (Exception e)
+        {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @Override
+    public List<AmenityEntity> getByHotelId(int hotelsId) {
+        try
+        {
+            List<AmenityEntity> amenityEntityList=new ArrayList<>();
+            HotelEntity hotelEntity=repository.findByHotelId(hotelsId);
+            System.out.println(hotelEntity.getAmenityEntities());
+            for (AmenityEntity amenities:hotelEntity.getAmenityEntities()) {
+                amenityEntityList.add(amenities);
+            }
+            return amenityEntityList;
+        }catch (Exception e)
         {
             e.printStackTrace();
             return null;

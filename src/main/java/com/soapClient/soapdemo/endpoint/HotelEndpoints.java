@@ -38,9 +38,16 @@ public class HotelEndpoints
     public GetHotelByIdResponse getHotelById(@RequestPayload GetHotelByIdRequest request) {
         GetHotelByIdResponse response = new GetHotelByIdResponse();
         HotelEntity hotelEntity = hotelService.getEntityByHotelId(request.getHotelId());
-        if(hotelEntity==null)
-        {
-            throw new HotelNotFoundException("Invalid Hotel id: "+ request.getHotelId());
+        List<AmenityEntity> amenitiesList = null;
+        for (AmenityEntity amenityEntity : hotelService.getByHotelId(hotelEntity.getHotelId())) {
+            amenitiesList = new ArrayList<>();
+            amenitiesList.add(amenityEntity);
+        }
+        List<Amenities> amenities=new ArrayList<>();
+        BeanUtils.copyProperties(amenitiesList, amenities);
+        response.setAmenities(amenities);
+        if (hotelEntity == null) {
+            throw new HotelNotFoundException("Invalid Hotel id: " + request.getHotelId());
         }
         HotelDetails hotelDetails = new HotelDetails();
         BeanUtils.copyProperties(hotelEntity, hotelDetails);
@@ -88,21 +95,20 @@ public class HotelEndpoints
         AddHotelResponse response = new AddHotelResponse();
         HotelDetails newHotelDetails = new HotelDetails();
         ServiceStatus serviceStatus = new ServiceStatus();
-
         HotelEntity newHotelEntity = new HotelEntity(request.getName(), request.getAddress(),request.getRating());
         HotelEntity savedHotelEntity = hotelService.addEntity(newHotelEntity);
         for (Amenities amenity:request.getAmenity())
         {
             AmenityEntity amenityEntity=new AmenityEntity(amenity.getName(), amenity.getDetails());
-            amenityEntity.setHotelEntities(Collections.singleton(newHotelEntity));
-            if(amenityService.AmenityNameExists(amenityEntity.getName()) == null)
+            amenityService.addEntity(amenityEntity);
+            if(newHotelEntity.getAmenityEntities()==null)
             {
-                amenityService.addEntity(amenityEntity);
+                newHotelEntity.setAmenityEntities(Collections.singleton(amenityEntity));
             }
             else {
-                newHotelEntity.setAmenityEntities(Collections.singleton(amenityService.AmenityNameExists(amenityEntity.getName())));
-                hotelService.updateEntity(newHotelEntity);
+                newHotelEntity.addAmenity(amenityEntity);
             }
+            hotelService.updateEntity(newHotelEntity);
         }
         if (savedHotelEntity == null) {
             serviceStatus.setStatusCode("CONFLICT");
