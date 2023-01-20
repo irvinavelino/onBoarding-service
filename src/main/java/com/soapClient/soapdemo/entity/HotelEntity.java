@@ -24,11 +24,7 @@ public class HotelEntity implements Serializable {
     @ManyToMany(fetch = FetchType.LAZY,
             cascade = {
                     CascadeType.MERGE
-            })
-    @JoinTable(
-            name = "hotel_amenities",
-            joinColumns = @JoinColumn(name = "amenityId"),
-            inverseJoinColumns = @JoinColumn(name = "hotelId"))
+            },mappedBy = "hotelEntities")
     private Set<AmenityEntity> amenityEntities;
     public HotelEntity() {
 
@@ -43,8 +39,13 @@ public class HotelEntity implements Serializable {
     }
 
     public void addAmenity(AmenityEntity amenityEntity){
-        this.amenityEntities.add(amenityEntity);
-        amenityEntity.getHotelEntities().add(this);
+        if(this.getAmenityEntities()==null)
+        {
+            this.setAmenityEntities(Collections.singleton(amenityEntity));
+        }else {
+            this.amenityEntities.add(amenityEntity);
+            amenityEntity.getHotelEntities().add(this);
+        }
     }
     public void removeAmenity(int amenityId)
     {

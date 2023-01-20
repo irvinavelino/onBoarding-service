@@ -1,6 +1,7 @@
 package com.soapClient.soapdemo.service;
 
 import com.soapClient.soapdemo.entity.AmenityEntity;
+import com.soapClient.soapdemo.entity.HotelEntity;
 import com.soapClient.soapdemo.repository.AmenityEntityRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -42,6 +43,28 @@ public class AmenityEntityServiceImpl implements AmenityEntityService{
         catch (Exception e) {
             e.printStackTrace();
             return null;
+        }
+    }
+
+    @Override
+    public AmenityEntity findEntityByName(String name) {
+        try{
+            return repository.findAmenityByName(name);
+        }catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @Override
+    public boolean updateEntity(AmenityEntity entity) {
+        try {
+            this.repository.save(entity);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println(e);
+            return false;
         }
     }
 }

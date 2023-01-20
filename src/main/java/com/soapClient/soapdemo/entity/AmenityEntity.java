@@ -16,10 +16,14 @@ public class AmenityEntity
     private int amenityId;
     private String name;
     private String details;
-    @ManyToMany(fetch = FetchType.LAZY,
+    @ManyToMany(fetch = FetchType.EAGER,
             cascade = {
                     CascadeType.MERGE
-            },mappedBy = "amenityEntities")
+            })
+    @JoinTable(
+            name = "hotel_amenities",
+            joinColumns = @JoinColumn(name = "amenityId"),
+            inverseJoinColumns = @JoinColumn(name = "hotelId"))
     private Set<HotelEntity> hotelEntities=new HashSet<>();
     public AmenityEntity() {
     }
@@ -61,15 +65,13 @@ public class AmenityEntity
         this.details = details;
     }
     public void addHotel(HotelEntity hotelEntity){
-        if(this.hotelEntities==null) {
-            this.hotelEntities = Collections.singleton(hotelEntity);
-        }
-        else
-        {
             this.hotelEntities.add(hotelEntity);
-            hotelEntity.getAmenityEntities().add(this);
-        }
-
+            if(hotelEntity.getAmenityEntities()==null)
+            {
+                hotelEntity.setAmenityEntities(Collections.singleton(this));
+            }else{
+                hotelEntity.getAmenityEntities().add(this);
+            }
     }
     public void removeHotel(int hotelId)
     {

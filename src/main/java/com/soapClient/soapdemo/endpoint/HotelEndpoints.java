@@ -99,16 +99,30 @@ public class HotelEndpoints
         HotelEntity savedHotelEntity = hotelService.addEntity(newHotelEntity);
         for (Amenities amenity:request.getAmenity())
         {
-            AmenityEntity amenityEntity=new AmenityEntity(amenity.getName(), amenity.getDetails());
-            amenityService.addEntity(amenityEntity);
-            if(newHotelEntity.getAmenityEntities()==null)
+            AmenityEntity foundAmenity= amenityService.findEntityByName(amenity.getName());
+            if(foundAmenity==null)
             {
-                newHotelEntity.setAmenityEntities(Collections.singleton(amenityEntity));
-            }
-            else {
+                AmenityEntity amenityEntity=new AmenityEntity(amenity.getName(), amenity.getDetails());
+                amenityEntity.setHotelEntities(Collections.singleton(newHotelEntity));
                 newHotelEntity.addAmenity(amenityEntity);
+                hotelService.updateEntity(newHotelEntity);
+                //amenityService.addEntity(amenityEntity);
             }
-            hotelService.updateEntity(newHotelEntity);
+            else
+            {
+                if(foundAmenity.getHotelEntities()!=null)
+                {
+                    System.out.println("Si hay hotelentities");
+                    foundAmenity.addHotel(newHotelEntity);
+                    amenityService.updateEntity(foundAmenity);
+                }
+                else{
+                    System.out.println("No hay hotel entities");
+                    foundAmenity.setHotelEntities(Collections.singleton(newHotelEntity));
+                    amenityService.updateEntity(foundAmenity);
+                }
+            }
+
         }
         if (savedHotelEntity == null) {
             serviceStatus.setStatusCode("CONFLICT");

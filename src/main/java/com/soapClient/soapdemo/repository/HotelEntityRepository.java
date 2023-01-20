@@ -13,5 +13,4 @@ public interface HotelEntityRepository extends CrudRepository<HotelEntity,Intege
     public List<HotelEntity> findByName(String name);
     public HotelEntity findByHotelId(int id);
     List<HotelEntity> findAll();
-    public List<AmenityEntity> findAmenitiesByHotelId(int hotelId);
 }
