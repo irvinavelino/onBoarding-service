@@ -4,7 +4,12 @@ import com.soapClient.soapdemo.entity.AmenityEntity;
 import com.soapClient.soapdemo.entity.HotelEntity;
 import com.soapClient.soapdemo.repository.AmenityEntityRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class AmenityEntityServiceImpl implements AmenityEntityService{
@@ -65,6 +70,21 @@ public class AmenityEntityServiceImpl implements AmenityEntityService{
             e.printStackTrace();
             System.out.println(e);
             return false;
+        }
+    }
+
+    @Override
+    public List<AmenityEntity> getAllEntities() {
+        try {
+            List<AmenityEntity> list = new ArrayList<>();
+            Pageable paging= PageRequest.of(0,5);
+            repository.findAll().forEach(e -> list.add(e));
+            return list;
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            return null;
         }
     }
 }

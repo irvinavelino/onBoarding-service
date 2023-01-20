@@ -62,13 +62,21 @@ public class HotelEndpoints
         GetAllHotelsResponse response = new GetAllHotelsResponse();
         List<HotelDetails> hotelDetailsList = new ArrayList<HotelDetails>();
         List<HotelEntity> hotelEntityList = hotelService.getAllEntities();
+        List<Amenities> amenitiesList=new ArrayList<>();
+        List<AmenityEntity> amenityEntityList=amenityService.getAllEntities();
         for (HotelEntity entity : hotelEntityList) {
             HotelDetails hotelDetails = new HotelDetails();
             BeanUtils.copyProperties(entity, hotelDetails);
             hotelDetailsList.add(hotelDetails);
         }
+        for(AmenityEntity entity:amenityEntityList)
+        {
+            Amenities amenities=new Amenities();
+            BeanUtils.copyProperties(entity,amenities);
+            amenitiesList.add(amenities);
+        }
         response.getHotelDetails().addAll(hotelDetailsList);
-
+        response.getAmenities().addAll(amenitiesList);
         return response;
 
     }

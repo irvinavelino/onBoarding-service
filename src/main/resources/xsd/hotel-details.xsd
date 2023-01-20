@@ -39,6 +39,7 @@
         <xs:complexType>
             <xs:sequence>
                 <xs:element name="HotelDetails" type="tns:HotelDetails" maxOccurs="unbounded"></xs:element>
+                <xs:element name="Amenities" type="tns:Amenities" maxOccurs="unbounded"></xs:element>
             </xs:sequence>
         </xs:complexType>
     </xs:element>

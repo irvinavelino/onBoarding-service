@@ -11,4 +11,5 @@ public interface AmenityEntityRepository extends CrudRepository<AmenityEntity,In
     public AmenityEntity getByname(String name);
     public AmenityEntity findAmenityByName(String name);
     public List<HotelEntity> findHotelsByAmenityId(int amenityId);
+    public List<AmenityEntity> findAll();
 }
